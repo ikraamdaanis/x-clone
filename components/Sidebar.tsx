@@ -40,8 +40,8 @@ const NAVIGATION_ITEMS = [
 /** The app's sidebar which holds important links */
 export const Sidebar = () => {
   return (
-    <header className="sticky top-0 flex h-screen flex-col justify-between pl-2">
-      <nav className="flex flex-col gap-3 py-2">
+    <header className="sticky top-0 flex h-screen flex-col justify-between p-2">
+      <nav className="flex flex-col gap-3 ">
         <Link
           className="flex w-fit items-center justify-start space-x-4 rounded-3xl px-4  py-2 text-[20px] font-medium transition duration-200 hover:bg-white/10"
           href="/"
@@ -58,7 +58,7 @@ export const Sidebar = () => {
             {item.title !== "X" && <div>{item.title}</div>}
           </Link>
         ))}
-        <button className="m-4 rounded-full bg-twitterColor p-4 py-2 text-center text-lg transition duration-200 hover:bg-opacity-70">
+        <button className="m-4 rounded-full bg-twitterColor p-4 py-2 text-center text-lg font-semibold  transition  duration-200 hover:bg-opacity-70">
           Post
         </button>
       </nav>
