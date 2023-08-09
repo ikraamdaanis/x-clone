@@ -1,7 +1,16 @@
+import { Database } from "@/types/supabase";
 import { BsDot, BsThreeDots } from "react-icons/bs";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 /** Displays a Post. */
-export const Post = () => {
+export const Post = ({
+  post
+}: {
+  post: Database["public"]["Tables"]["posts"]["Row"];
+}) => {
   return (
     <div className="flex w-full gap-2 border-b-[0.5px] border-gray-600 p-2">
       <div>
@@ -15,15 +24,15 @@ export const Post = () => {
             <div className="text-gray-500">
               <BsDot />
             </div>
-            <div className="text-gray-500">1 hour ago</div>
+            <div className="text-gray-500">
+              {dayjs(post.created_at).fromNow()}
+            </div>
             <div className="ml-auto text-gray-500">
               <BsThreeDots />
             </div>
           </div>
         </div>
-        <div className="text-md">
-          This is a test post. // TODO: Add a post body.
-        </div>
+        <div className="text-md">{post.title}</div>
         <div className="mt-2 h-60 w-full rounded-md bg-slate-400"></div>
         <div className="mt-2 flex items-center justify-between gap-2 py-1 text-gray-600">
           <svg
