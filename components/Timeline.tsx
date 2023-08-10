@@ -9,7 +9,7 @@ import { cookies } from "next/headers";
 export const Timeline = async () => {
   const supabase = createServerComponentClient<Database>({ cookies });
 
-  const { data: posts } = await supabase.from("posts").select();
+  const { data: posts } = await supabase.from("posts").select("*, profiles(*)");
 
   return (
     <main className="flex h-full min-h-screen w-full max-w-[600px] flex-col border-l-[0.5px] border-r-[0.5px] border-gray-600">
