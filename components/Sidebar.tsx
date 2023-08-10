@@ -46,7 +46,9 @@ const NAVIGATION_ITEMS = [
 export const Sidebar = async () => {
   const supabase = createServerComponentClient<Database>({ cookies });
 
-  const session = (await supabase.auth.getSession()).data.session;
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
   return (
     <header className="sticky top-0 flex h-screen min-w-[275px] flex-col justify-between p-2">
