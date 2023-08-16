@@ -9,7 +9,24 @@ import { cookies } from "next/headers";
 export const Timeline = async () => {
   const supabase = createServerComponentClient<Database>({ cookies });
 
-  const { data: posts } = await supabase.from("posts").select("*, profiles(*)");
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
+
+  const { data } = await supabase
+    .from("posts")
+    .select("*, profiles(*), likes(*)");
+
+  const posts =
+    data?.map(post => {
+      return {
+        ...post,
+        user_has_liked_tweet: post.likes.find(
+          like => like.user_id === session?.user.id
+        ),
+        likes: post.likes.length
+      };
+    }) ?? [];
 
   return (
     <main className="flex h-full min-h-screen w-full max-w-[600px] flex-col border-l-[0.5px] border-r-[0.5px] border-gray-600">
