@@ -4,7 +4,13 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
 /** Button to like a post */
-export const LikeButton = ({ post }: { post: PostWithAuthor }) => {
+export const LikeButton = ({
+  post,
+  addOptimisticPost
+}: {
+  post: PostWithAuthor;
+  addOptimisticPost: (action: PostWithAuthor) => void;
+}) => {
   const router = useRouter();
 
   /** Likes/unlikes a post. */
@@ -16,6 +22,11 @@ export const LikeButton = ({ post }: { post: PostWithAuthor }) => {
 
     if (user) {
       if (post.user_has_liked_tweet) {
+        addOptimisticPost({
+          ...post,
+          likes: post.likes - 1,
+          user_has_liked_tweet: !post.user_has_liked_tweet
+        });
         await supabase.from("likes").delete().match({
           post_id: post.id,
           user_id: user.id
@@ -24,6 +35,12 @@ export const LikeButton = ({ post }: { post: PostWithAuthor }) => {
         await supabase
           .from("likes")
           .insert({ post_id: post.id, user_id: user.id });
+
+        addOptimisticPost({
+          ...post,
+          likes: post.likes + 1,
+          user_has_liked_tweet: !post.user_has_liked_tweet
+        });
       }
 
       router.refresh();
