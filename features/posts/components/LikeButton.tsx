@@ -2,15 +2,14 @@
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 /** Button to like a post */
-export const LikeButton = ({ post }: { post: any }) => {
+export const LikeButton = ({ post }: { post: PostWithAuthor }) => {
   const router = useRouter();
 
   async function likePost() {
     console.log("like");
-    const supabase = createClientComponentClient();
+    const supabase = createClientComponentClient<Database>();
     const {
       data: { user }
     } = await supabase.auth.getUser();

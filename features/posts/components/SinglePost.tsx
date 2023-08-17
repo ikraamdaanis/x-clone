@@ -1,23 +1,20 @@
-import { Database } from "@/types/supabase";
-import { BsDot, BsThreeDots } from "react-icons/bs";
+import { LikeButton } from "@/features/posts/components/LikeButton";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
-import { LikeButton } from "@/features/posts/components/LikeButton";
+import { BsDot, BsThreeDots } from "react-icons/bs";
 
 dayjs.extend(relativeTime);
 
-type Post = Database["public"]["Tables"]["posts"]["Row"];
-
 /** Displays a Post. */
-export const Post = ({ post }: { post: any }) => {
+export const SinglePost = ({ post }: { post: PostWithAuthor }) => {
   console.log(post);
   return (
     <div className="flex w-full gap-2 border-b-[0.5px] border-gray-600 p-2">
       <div>
         <div className="h-11 w-11 flex-none overflow-hidden rounded-full bg-slate-400">
           <Image
-            src={post.profiles.avatar_url}
+            src={post.author.avatar_url}
             height={44}
             width={44}
             alt="profile picture"
@@ -26,9 +23,9 @@ export const Post = ({ post }: { post: any }) => {
       </div>
       <div className="flex w-full flex-col pr-2">
         <div className="flex items-center gap-2">
-          <div>{post.profiles?.name}</div>
+          <div>{post.author?.name}</div>
           <div className="flex w-full items-center text-sm">
-            <div className="text-gray-500">@{post.profiles?.username}</div>
+            <div className="text-gray-500">@{post.author?.username}</div>
             <div className="text-gray-500">
               <BsDot />
             </div>

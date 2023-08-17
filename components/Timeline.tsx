@@ -1,5 +1,5 @@
 import { ComposePost } from "@/features/posts/components/ComposePost";
-import { Post } from "@/features/posts/components/Post";
+import { SinglePost } from "@/features/posts/components/SinglePost";
 import { Database } from "@/types/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import dayjs from "dayjs";
@@ -15,13 +15,14 @@ export const Timeline = async () => {
 
   const { data } = await supabase
     .from("posts")
-    .select("*, profiles(*), likes(*)");
+    .select("*, author: profiles(*), likes(*)");
 
   const posts =
     data?.map(post => {
       return {
         ...post,
-        user_has_liked_tweet: post.likes.find(
+        author: Array.isArray(post.author) ? post.author[0] : post.author,
+        user_has_liked_tweet: !!post.likes.find(
           like => like.user_id === session?.user.id
         ),
         likes: post.likes.length
@@ -42,7 +43,7 @@ export const Timeline = async () => {
               dayjs(b.created_at).isAfter(dayjs(a.created_at)) ? 1 : -1
             )
             ?.map(post => {
-              return <Post key={post.id} post={post} />;
+              return <SinglePost key={post.id} post={post} />;
             })}
         </div>
       </div>
