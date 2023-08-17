@@ -20,7 +20,6 @@ export const ComposePost = () => {
       await supabase.from("posts").insert({ title: title, user_id: user.id });
     }
 
-    console.log("hello");
     revalidatePath("/");
   }
 

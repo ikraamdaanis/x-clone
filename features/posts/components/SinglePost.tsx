@@ -8,7 +8,6 @@ dayjs.extend(relativeTime);
 
 /** Displays a Post. */
 export const SinglePost = ({ post }: { post: PostWithAuthor }) => {
-  console.log(post);
   return (
     <div className="flex w-full gap-2 border-b-[0.5px] border-gray-600 p-2">
       <div>
