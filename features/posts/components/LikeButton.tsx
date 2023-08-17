@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 export const LikeButton = ({ post }: { post: PostWithAuthor }) => {
   const router = useRouter();
 
+  /** Likes/unlikes a post. */
   async function likePost() {
-    console.log("like");
     const supabase = createClientComponentClient<Database>();
     const {
       data: { user }
