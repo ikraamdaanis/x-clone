@@ -1,8 +1,7 @@
 import { ComposePost } from "@/features/posts/components/ComposePost";
-import { SinglePost } from "@/features/posts/components/SinglePost";
+import { PostsContainer } from "@/features/posts/components/PostsContainer";
 import { Database } from "@/types/supabase";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import dayjs from "dayjs";
 import { cookies } from "next/headers";
 
 /** X Timeline */
@@ -37,15 +36,7 @@ export const Timeline = async () => {
       <div className="relative flex items-stretch space-x-2 border-b-[0.5px] border-gray-600 px-4 py-6"></div>
       <div className="w-full">
         <ComposePost />
-        <div className="flex flex-col">
-          {posts
-            ?.sort((a, b) =>
-              dayjs(b.created_at).isAfter(dayjs(a.created_at)) ? 1 : -1
-            )
-            ?.map(post => {
-              return <SinglePost key={post.id} post={post} />;
-            })}
-        </div>
+        <PostsContainer posts={posts} />
       </div>
     </main>
   );
