@@ -2,10 +2,14 @@
 
 /** Container for Posts in the Timeline. */
 import { SinglePost } from "@/features/posts/components/SinglePost";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import dayjs from "dayjs";
-import { experimental_useOptimistic as useOptimistic } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, experimental_useOptimistic as useOptimistic } from "react";
 
 export const PostsContainer = ({ posts }: { posts: PostWithAuthor[] }) => {
+  const router = useRouter();
+
   const [optimisticPosts, addOptimisticPost] = useOptimistic<
     PostWithAuthor[],
     PostWithAuthor
@@ -16,6 +20,29 @@ export const PostsContainer = ({ posts }: { posts: PostWithAuthor[] }) => {
 
     return newPosts;
   });
+
+  const supabase = createClientComponentClient<Database>();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("realtime-posts")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "posts"
+        },
+        () => {
+          router.refresh();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [router, supabase]);
 
   return (
     <div className="flex flex-col">
